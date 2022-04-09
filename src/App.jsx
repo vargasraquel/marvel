@@ -6,25 +6,25 @@ import "./css/main.scss";
 
 function App() {
   const [characters, setCharacters] = useState([]);
-  const [sortType, setSortType] = useState("characters");
+  const [sortType, setSortType] = useState(characters);
 
   useEffect(() => {
     fetch("https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/all.json")
       .then((response) => response.json())
-      .then((data) => setCharacters(data));
+      .then((data) =>
+        setCharacters(
+          data.filter((character) => {
+            if (
+              character.biography.publisher === "Marvel Comics" &&
+              character.appearance.gender === "Female"
+            ) {
+              return character;
+            }
+            return 0;
+          })
+        )
+      );
   }, []);
-
-  // eslint-disable-next-line array-callback-return
-  const marvelCharacter = characters.filter((character) => {
-    if (
-      character.biography.publisher === "Marvel Comics" &&
-      character.appearance.gender === "Female"
-    ) {
-      return character;
-    }
-  });
-
-  const [characterList, setCharacterList] = useState(marvelCharacter);
 
   useEffect(() => {
     const sortArray = (type) => {
@@ -35,15 +35,17 @@ function App() {
         power: "power",
       };
       const sortProperty = types[type];
-      const sorted = [...marvelCharacter].sort((a, b) => {
+
+      const sorted = [...characters].sort((a, b) => {
         return b.powerstats[sortProperty] - a.powerstats[sortProperty];
       });
 
-      setCharacterList(sorted);
+      setCharacters(sorted);
     };
 
     sortArray(sortType);
-  }, [...marvelCharacter, sortType]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sortType]);
 
   return (
     <div className="container">
@@ -51,7 +53,7 @@ function App() {
 
       <Select setSortType={setSortType} />
 
-      <Cards characterList={characterList} />
+      <Cards characters={characters} />
     </div>
   );
 }

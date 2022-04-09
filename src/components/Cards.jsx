@@ -1,7 +1,7 @@
-export default function Cards({ characterList }) {
+export default function Cards({ characters }) {
   return (
     <div className="cards">
-      {characterList.map((character) => (
+      {characters.map((character) => (
         <div className="card" key={character.id}>
           <h2>{character.name}</h2>
           <div className="info">
