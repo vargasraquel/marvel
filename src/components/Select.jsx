@@ -1,6 +1,6 @@
-export default function Select({ setSortType }) {
+export default function Select({ sortWomen }) {
   return (
-    <select onChange={(e) => setSortType(e.target.value)} defaultValue="sort">
+    <select defaultValue="sort" onChange={sortWomen} >
       <option disabled value="sort">
         Sort by...
       </option>
