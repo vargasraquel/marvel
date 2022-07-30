@@ -1,6 +1,6 @@
-export default function Select({ sortWomen }) {
+export default function Select({ onChange }) {
   return (
-    <select defaultValue="sort" onChange={sortWomen} >
+    <select defaultValue="sort" onChange={onChange} >
       <option disabled value="sort">
         Sort by...
       </option>
@@ -8,7 +8,6 @@ export default function Select({ sortWomen }) {
       <option value="strength">Strength</option>
       <option value="speed">Speed</option>
       <option value="power">Power</option>
-    </select>
-    
+    </select>    
   );
 }

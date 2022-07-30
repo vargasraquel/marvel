@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback} from "react";
 import Cards from "./components/Cards";
 import Select from "./components/Select";
 
@@ -6,7 +6,6 @@ import "./css/main.scss";
 
 function App() {
   const [characters, setCharacters] = useState([]);
-  const [sortType, setSortType] = useState(characters);
 
   useEffect(() => {
     fetch("https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/all.json")
@@ -25,36 +24,29 @@ function App() {
       });
   }, []);
 
-  const sortWomen = useCallback(
-    (event) => {
-      setSortType(event.target.value);
+  const sortArray = useCallback((type) => {
+    const types = {
+      intelligence: "intelligence",
+      strength: "strength",
+      speed: "speed",
+      power: "power",
+    };
 
-      const sortArray = (type) => {
-        const types = {
-          intelligence: "intelligence",
-          strength: "strength",
-          speed: "speed",
-          power: "power",
-        };
-        const sortProperty = types[type];
+    const sortProperty = types[type];
 
-        const sorted = [...characters].sort((a, b) => {
-          return b.powerstats[sortProperty] - a.powerstats[sortProperty];
-        });
-
-        setCharacters(sorted);
-      };
-
-      sortArray(sortType);
-    },
-    [characters, sortType]
-  );
+    const sorted = [...characters].sort(
+      (a, b) => b.powerstats[sortProperty] - a.powerstats[sortProperty]
+    );
+    setCharacters(sorted);
+  }, [characters]);
 
   return (
     <div className="container">
       <h1>Marvel female characters</h1>
 
-      <Select sortWomen={sortWomen} />
+      <Select
+        onChange={(event) => sortArray(event.target.value)}
+      />
 
       <Cards characters={characters} />
     </div>
